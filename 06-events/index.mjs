@@ -1,10 +1,10 @@
 import { EventEmitter } from "events";
+const myEmitter = new EventEmitter();
 
 const timeoutListenerFn = (name) => {
     console.log(`Hi my ${name} and i am your frend!`);
 };
 
-const myEmitter = new EventEmitter();
 myEmitter.on("timeOut", (name, numSec) => {
     console.log(`${name}, Timeout events you will see in ${numSec} seconds!`);
 });

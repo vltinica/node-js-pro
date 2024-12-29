@@ -1,36 +1,22 @@
 const http = require("http");
-const { text, json } = require("stream/consumers");
+const {getHTML, getText, getComments, getError} = require("./handler");
 
 const PORT = 5000;
-
-const comments = [
-    { id: 100, text: "First comment", author: "Vladimir" },
-    { id: 200, text: "Second comment", author: "Lili" },
-    { id: 300, text: "Last comment", author: "Soso" },
-];
+exports.PORT = PORT;
 
 const server = http.createServer((req, res) => {
-    if (req.url === "/html") {
-        res.statusCode = 200;
-        res.setHeader("Content-Type", "text/html");
-        res.write("<html><body><div>");
-        res.write("<h1>Greeting from the HTTP server!</h1>");
-        res.write("</div></body></html>");
-        return res.end();
+    if (req.method === "GET" && req.url === "/html") {
+        return getHTML(req, res);
     }
-    if (req.url === "/text") {
-        res.statusCode = 200;
-        res.setHeader("Content-Type", "text/plain");
-        return res.end("This is my simple text");
+
+    if (req.method === "GET" && req.url === "/text") {
+        return getText(req, res);
     }
-    if (req.url === "/json") {
-        res.statusCode = 200;
-        res.setHeader("Content-Type", "application/json");
-        return res.end(JSON.stringify(comments))
+
+    if (req.method === "GET" && req.url === "/comments") {
+        return getComments(req, res);
     }
-    res.statusCode = 404
-    res.setHeader("Content-Type", "text/html")
-    return res.end("<h2>Page not found!</h2>")
+    getError(req, res);
 });
 
 server.listen(PORT, () => {

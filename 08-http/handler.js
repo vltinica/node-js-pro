@@ -1,4 +1,4 @@
-const comments = require("./data")
+const comments = require("./data");
 
 function getHTML(req, res) {
     res.statusCode = 200;
@@ -21,6 +21,18 @@ function getComments(req, res) {
     return res.end(JSON.stringify(comments));
 }
 
+function postComment(req, res) {
+    let comment = "";
+
+    req.on("data", (chunk) => {comment += chunk});
+    
+    req.on("end", () => {
+        console.log(comment);
+        res.statusCode = 200;
+        res.end("Comment data was received");
+    });
+}
+
 function getError(req, res) {
     res.statusCode = 404;
     res.setHeader("Content-Type", "text/html");
@@ -28,5 +40,9 @@ function getError(req, res) {
 }
 
 module.exports = {
-    getHTML, getText, getComments, getError
-}
+    getHTML,
+    getText,
+    getComments,
+    postComment,
+    getError,
+};

@@ -1,5 +1,6 @@
 const http = require("http");
 const {
+    getHome,
     getHTML,
     getText,
     getComments,
@@ -9,6 +10,9 @@ const {
 const PORT = 5001;
 
 const server = http.createServer((req, res) => {
+    if (req.method === "GET" && req.url === "/") {
+        return getHome(req, res);
+    }
     if (req.method === "GET" && req.url === "/html") {
         return getHTML(req, res);
     }

@@ -1,4 +1,20 @@
+const fs = require("fs");
+const qs = require("querystring")
 const comments = require("./data");
+
+function getHome(req, res) {
+    fs.readFile("./files/comment-form.html", (err, data) => {
+        if (err) {
+            res.statusCode = 500;
+            res.setHeader("Content-Type", "text/plain");
+            res.end("Server error while loading HTML file");
+        } else {
+            res.statusCode = 200;
+            res.setHeader("Content-Type", "text/html");
+            res.end(data);
+        }
+    });
+}
 
 function getHTML(req, res) {
     res.statusCode = 200;
@@ -23,7 +39,24 @@ function getComments(req, res) {
 
 function postComment(req, res) {
     res.setHeader("Content-Type", "text/plain");
-    if (req.headers["content-type"] === "application/json") {
+
+    if (req.headers["content-type"] === "application/x-www-form-urlencoded") {
+        let body = "";
+        req.on("data", (chunk) => {
+            body += chunk.toString()
+        })
+        req.on("end", () => {
+            try {
+                const myComment = qs.parse(body)
+            comments.push(myComment)
+                res.statusCode = 200;
+                res.end("Comment data was received!")
+            } catch (error) {
+                res.statusCode = 400;
+                res.end("Invalid Form data!")
+            } 
+        })
+    } else if (req.headers["content-type"] === "application/json") {
         let commontJSON = "";
 
         req.on("data", (chunk) => {
@@ -42,7 +75,7 @@ function postComment(req, res) {
         }
     } else {
         res.statusCode = 400;
-        res.end("Data must be in the JSON format!");
+        res.end("Data must be in the JSON format or as form!");
     }
 }
 
@@ -53,6 +86,7 @@ function getError(req, res) {
 }
 
 module.exports = {
+    getHome,
     getHTML,
     getText,
     getComments,

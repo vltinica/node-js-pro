@@ -50,7 +50,10 @@ function postComment(req, res) {
                 const myComment = qs.parse(body)
             comments.push(myComment)
                 res.statusCode = 200;
-                res.end("Comment data was received!")
+                res.setHeader("Content-Type","text/html")
+                res.write("<h1>Comment data was received!</h1>")
+                res.write("<a href='/'>Submit one more comment</a>")
+                res.end()
             } catch (error) {
                 res.statusCode = 400;
                 res.end("Invalid Form data!")

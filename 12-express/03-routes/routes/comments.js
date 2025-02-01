@@ -1,12 +1,16 @@
-const express = require("express");
+const express = require('express');
+const {
+    getCommentsHandler,
+    postCommentsHandler,
+    getSingleCommentHandler,
+    deleteSingleCommentHandler,
+} = require('../controllers/comments');
 
 const router = express.Router();
 
-
-
-router.get("/comments", getCommentsHandler)
-router.post("/comments", postCommentHandler)
-router.get("/comments/:commentId", getSingleCommentHandler);
-router.delete("/comments/:commentId", deleteCommentHandler);
+router.get('/', getCommentsHandler);
+router.post('/', postCommentsHandler);
+router.get('/:commentId', getSingleCommentHandler);
+router.delete('/:commentId', deleteSingleCommentHandler);
 
 module.exports = router;

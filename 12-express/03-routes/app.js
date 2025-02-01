@@ -1,15 +1,8 @@
-const express = require("express");
+const express = require('express');
+const router = require('./routes');
+
 const app = express();
-const port = 5050;
 
+app.use(router);
 
-
-app.get("/", getRootHandler);
-
-app.get("/users", getUserHandler);
-app.post("/users", postUsersHandler);
-app.get("/users/userId", getSingleUserHandler)
-
-
-
-app.listen(port, () => console.log(`Example app listening on port ${port}!`));
+app.listen(5000, () => console.log('Server was started on port 5000'));
